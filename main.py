@@ -6,8 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# This not finished yet
-
+print("hello world")
 window = tk.Tk()
 width = window.winfo_screenwidth()
 height = window.winfo_screenheight()

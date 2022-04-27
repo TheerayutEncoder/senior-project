@@ -6,10 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-print("hello world")
 window = tk.Tk()
-width = window.winfo_screenwidth()
-height = window.winfo_screenheight()
 window.title("TrackGraph")
 window.attributes("-fullscreen", True)
 # window.geometry("%dx%d" % (800, 600))
@@ -114,8 +111,8 @@ def set_axisy():
 def scaling():
     global co_real_x, co_real_y, axis_x, axis_y
     for item in coordinate:
-        x = axis_x[2] + (item[0]-axis_x[0])*((axis_x[3]-axis_x[2])/(axis_x[1]-axis_x[0]))
-        y = axis_y[2] + (item[1]-axis_y[0])*((axis_y[3]-axis_y[2])/(axis_y[1]-axis_y[0]))
+        x = axis_x[2] + (item[0] - axis_x[0]) * ((axis_x[3] - axis_x[2]) / (axis_x[1] - axis_x[0]))
+        y = axis_y[2] + (item[1] - axis_y[0]) * ((axis_y[3] - axis_y[2]) / (axis_y[1] - axis_y[0]))
         co_real_x.append(x)
         co_real_y.append(y)
     for i in range(len(co_real_x)):
@@ -158,8 +155,8 @@ def calculate_area():
     global co_real_x, co_real_y
     part1 = 0.0
     part2 = 0.0
-    for i in range(len(co_real_x)-2):
-        area = 0.5*(co_real_x[i+1]-co_real_x[i])*(co_real_y[i+1]+co_real_y[i])
+    for i in range(len(co_real_x) - 2):
+        area = 0.5 * (co_real_x[i + 1] - co_real_x[i]) * (co_real_y[i + 1] + co_real_y[i])
         if area >= 0:
             part1 += area
         else:
@@ -167,9 +164,9 @@ def calculate_area():
 
     frame4 = Tk()
     frame4.geometry("400x200")
-    result = Label(frame4, text="Area (EMF > 0) = %.7f" %part1, font=('Arial',25))
+    result = Label(frame4, text="Area (emf>0) = %.7f" % part1, font=('Arial', 20))
     result.pack(pady=25)
-    result2 = Label(frame4, text="Area (EMF < 0) = %.7f" %part2, font=('Arial',25))
+    result2 = Label(frame4, text="Area (emf<0) = %.7f" % part2, font=('Arial', 20))
     result2.pack()
     frame4.mainloop()
 
@@ -241,13 +238,13 @@ def draw_dot(event):
     # print("%d\t%d" % (x1, y1))
 
 
-select_button = tk.Button(text='Select img file', command=file_name)
+select_button = tk.Button(text='Select img file', font=25, command=file_name)
 select_button.pack(pady=10)
 
 select_label = Label(text="Not select any file.")
 select_label.pack()
 
-insert_button = tk.Button(text='insert image (only JPG)', command=insert_image)
+insert_button = tk.Button(text='insert image (only JPG)', font=25, command=insert_image)
 insert_button.pack(pady=10)
 
 canvas = Canvas(width=1920, height=1080, bg="white")

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog as fd
+from tkinter.filedialog import asksaveasfile
 from tkinter import *
 from PIL import ImageTk, Image
 import pandas as pd
@@ -53,9 +54,9 @@ def set_axisx():
         for item in coordinate:
             axis_x.append(item[0])
         axis_x.sort()
-        lbx_min = Label(frame1, text=axis_x[0])
+        lbx_min = Label(frame1, text=coordinate[0][0])
         lbx_min.grid(column=2, row=2)
-        lbx_max = Label(frame1, text=axis_x[1])
+        lbx_max = Label(frame1, text=coordinate[1][0])
         lbx_max.grid(column=2, row=3)
 
     ok_button = Button(frame1, text="Ok", width=10, command=set_x)
@@ -126,7 +127,17 @@ def clear():
 
 
 def save_coor():
-    pass
+    files = [('All Files', '*.*'),
+             ('Text Document', '*.txt')]
+
+    file = asksaveasfile(filetypes=files, initialfile="Untitled", defaultextension=".txt")
+    try:
+        with open(file.name, 'w') as f:
+            f.write("Times (s)\temf (V)\n")
+            for i in range(len(co_real_x)):
+                f.writelines(f"{co_real_x[i]}\t{co_real_y[i]}\n")
+    except AttributeError:
+        return
 
 
 def plot_graph():

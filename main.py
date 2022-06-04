@@ -6,6 +6,7 @@ from PIL import ImageTk, Image
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import csv
 
 window = tk.Tk()
 window.title("TrackGraph")
@@ -133,9 +134,17 @@ def save_coor():
     file = asksaveasfile(filetypes=files, initialfile="Untitled", defaultextension=".txt")
     try:
         with open(file.name, 'w') as f:
-            f.write("Times (s)\temf (V)\n")
+            f.write("Times,emf\n")
             for i in range(len(co_real_x)):
                 f.writelines(f"{co_real_x[i]}\t{co_real_y[i]}\n")
+
+        """with open('data.csv', 'w', encoding='UTF8') as csv_file:
+            writer = csv.writer(csv_file)
+            header = ['x', 'y']
+            writer.writerow(header)
+            for i in range(len(co_real_x)):
+                data = (co_real_x[i], co_real_y[i])
+                writer.writerow(data)"""
     except AttributeError:
         return
 

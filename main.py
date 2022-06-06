@@ -134,7 +134,6 @@ def save_coor():
     file = asksaveasfile(filetypes=files, initialfile="Untitled", defaultextension=".txt")
     try:
         with open(file.name, 'w') as f:
-            f.write("Times,emf\n")
             for i in range(len(co_real_x)):
                 f.writelines(f"{co_real_x[i]}\t{co_real_y[i]}\n")
 

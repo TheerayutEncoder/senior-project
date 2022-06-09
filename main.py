@@ -221,9 +221,10 @@ def calculate_area():
 def about():
     frame_about = Tk()
     frame_about.geometry("400x250")
+    frame_about.title("About me")
 
     name_lb = Label(frame_about, text="Hi, I'm Top Theerayut.\nThis is TrackGraph program.\n"
-                                      "For magnetic flux determination form EMF graph.")
+                                      "For magnetic flux determination from EMF graph.")
     name_lb.pack(pady=50)
 
     contact = Label(frame_about, text="Contact me: Theerayutattajak@gmail.com")

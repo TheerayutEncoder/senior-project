@@ -13,7 +13,7 @@ window.title("TrackGraph")
 window.attributes("-fullscreen", True)
 # window.geometry("%dx%d" % (800, 600))
 
-# draw variable is a list that keep dot
+# draw:list[object] is a list that keep dot
 draw = []
 coordinate = []
 axis_x = []
@@ -119,12 +119,16 @@ def scaling():
         co_real_y.append(y)
     for i in range(len(co_real_x)):
         print("%f\t%f" % (co_real_x[i], co_real_y[i]))
+    axis_x.clear()
+    axis_y.clear()
 
 
 def clear():
     for item in draw:
         canvas.delete(item)
     coordinate.clear()
+    co_real_x.clear()
+    co_real_y.clear()
 
 
 def save_coor():
@@ -137,70 +141,106 @@ def save_coor():
             for i in range(len(co_real_x)):
                 f.writelines(f"{co_real_x[i]}\t{co_real_y[i]}\n")
 
-        """with open('data.csv', 'w', encoding='UTF8') as csv_file:
+        """
+        =====================================
+        Use this code if you want to write CSV file instead of text file
+        But trust need you dont need to try it
+        =====================================
+        
+        with open('data.csv', 'w', encoding='UTF8') as csv_file:
             writer = csv.writer(csv_file)
             header = ['x', 'y']
             writer.writerow(header)
             for i in range(len(co_real_x)):
                 data = (co_real_x[i], co_real_y[i])
-                writer.writerow(data)"""
+                writer.writerow(data)
+        """
     except AttributeError:
         return
 
 
-def plot_graph():
-    data = {}
-    if len(co_real_x) != 0:
-        data['Times(ms)'] = co_real_x
-        data['emf(V)'] = co_real_y
-
-        df = pd.DataFrame(data, columns=['Times(ms)', 'emf(V)'])
-        print(df)
-        frame3 = Tk()
-        frame3.title("Graph from tracking")
-
-        figure = plt.Figure(figsize=(6, 5), dpi=100)
-        ax = figure.add_subplot(111)
-        line = FigureCanvasTkAgg(figure, frame3)
-        line.get_tk_widget().pack()
-        df = df[['Times(ms)', 'emf(V)']].groupby('Times(ms)').sum()
-        df.plot(kind='line', legend=True, ax=ax, color='r', marker='', fontsize=10, grid=True)
-        ax.set_title('emf vs times')
-
-        frame3.mainloop()
+# def plot_graph():
+#     data = {}
+#     if len(co_real_x) != 0:
+#         data['Times(ms)'] = co_real_x
+#         data['emf(V)'] = co_real_y
+#
+#         df = pd.DataFrame(data, columns=['Times(ms)', 'emf(V)'])
+#         print(df)
+#         frame3 = Tk()
+#         frame3.title("Graph from tracking")
+#
+#         figure = plt.Figure(figsize=(6, 5), dpi=100)
+#         ax = figure.add_subplot(111)
+#         line = FigureCanvasTkAgg(figure, frame3)
+#         line.get_tk_widget().pack()
+#         df = df[['Times(ms)', 'emf(V)']].groupby('Times(ms)').sum()
+#         df.plot(kind='line', legend=True, ax=ax, color='r', marker='', fontsize=10, grid=True)
+#         ax.set_title('emf vs times')
+#
+#         frame3.mainloop()
 
 
 def calculate_area():
     global co_real_x, co_real_y
-    part1 = 0.0
-    part2 = 0.0
+    answer = 0.0
     for i in range(len(co_real_x) - 2):
         area = 0.5 * (co_real_x[i + 1] - co_real_x[i]) * (co_real_y[i + 1] + co_real_y[i])
-        if area >= 0:
-            part1 += area
-        else:
-            part2 += area
+        answer += area
+
+    answer = abs(answer)
 
     frame4 = Tk()
-    frame4.geometry("400x200")
-    result = Label(frame4, text="Area (emf>0) = %.7f" % part1, font=('Arial', 20))
+    frame4.geometry("450x300")
+    result = Label(frame4, text="Area under curve (Vs) = %.6f" % answer, font=('Arial', 20))
     result.pack(pady=25)
-    result2 = Label(frame4, text="Area (emf<0) = %.7f" % part2, font=('Arial', 20))
-    result2.pack()
+
+    lb1 = Label(frame4, text="Enter the number of coil turn", font=('Arial', 16))
+    lb1.pack()
+
+    n_coils = Entry(frame4, width=10)
+    n_coils.pack()
+
+    flux_lb = Label(frame4, text="Magnetic flux : 0 Wb")
+    flux_lb.pack()
+
+    def cal_flux():
+        try:
+            n = int(n_coils.get())
+        except ValueError:
+            n = 0
+        if n != 0:
+            flux_lb.config(text="Magnetic flux : %.6f Wb" % (answer / n))
+
+    button_cal = Button(frame4, text='Calculate magnetic flux', command=cal_flux)
+    button_cal.pack()
+
     frame4.mainloop()
+
+
+def about():
+    frame_about = Tk()
+    frame_about.geometry("400x250")
+
+    name_lb = Label(frame_about, text="Hi, I'm Top Theerayut.\nThis is TrackGraph program.\n"
+                                      "For magnetic flux determination form EMF graph.")
+    name_lb.pack(pady=50)
+
+    contact = Label(frame_about, text="Contact me: Theerayutattajak@gmail.com")
+    contact.pack()
 
 
 menubar = Menu(window)
 window.config(menu=menubar)
 
 file_menu = Menu(menubar)
-plot_menu = Menu(menubar)
+# plot_menu = Menu(menubar)
 help_menu = Menu(menubar)
 edit_menu = Menu(menubar)
 
 menubar.add_cascade(label="File", menu=file_menu)
 menubar.add_cascade(label="Edit", menu=edit_menu)
-menubar.add_cascade(label="Plot", menu=plot_menu)
+# menubar.add_cascade(label="Plot", menu=plot_menu)
 menubar.add_cascade(label="Help", menu=help_menu)
 
 file_menu.add_command(label='Save', command=save_coor)
@@ -209,10 +249,11 @@ file_menu.add_command(label='Exit', command=window.destroy)
 edit_menu.add_command(label="set axis x", command=set_axisx)
 edit_menu.add_command(label="set axis y", command=set_axisy)
 edit_menu.add_command(label="scaling", command=scaling)
-edit_menu.add_command(label="calculate area", command=calculate_area)
+edit_menu.add_command(label="calculate magnetic flux", command=calculate_area)
 edit_menu.add_command(label="clear", command=clear)
+help_menu.add_command(label="About me", command=about)
 
-plot_menu.add_command(label="Plot graph", command=plot_graph)
+# plot_menu.add_command(label="Plot graph", command=plot_graph)
 
 img2 = (Image.open("background.jpg"))
 resize_img2 = img2.resize((1920, 1080), Image.ANTIALIAS)
@@ -233,8 +274,9 @@ def file_name():
         select_label.config(text=filename)
         global img2, resize_img2, new_img2
         img2 = (Image.open(filename))
-        resize_img2 = img2.resize((1069, 700), Image.ANTIALIAS)
-        new_img2 = ImageTk.PhotoImage(resize_img2)
+        # resize_img2 = img2.resize((1069, 700), Image.ANTIALIAS)
+        # new_img2 = ImageTk.PhotoImage(resize_img2)
+        new_img2 = ImageTk.PhotoImage(img2)
 
     canvas.bind('<Button-1>', draw_dot)
 
@@ -253,8 +295,6 @@ def draw_dot(event):
     xy = (x1, y1)
     global coordinate
     coordinate.append(xy)
-
-    # print("%d\t%d" % (x1, y1))
 
 
 select_button = tk.Button(text='Select img file', font=25, command=file_name)

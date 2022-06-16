@@ -1,6 +1,6 @@
 def open_txt_file(n=0):
     point_x, point_y = [], []
-    with open('image_red_550.txt', 'r') as f:
+    with open('webplot_red_110.txt', 'r') as f:
         data_point = f.readlines()
         step = (len(data_point) // n) - 1
         for i in range(0, len(data_point), step):
@@ -28,10 +28,11 @@ def simp13(data_x, data_y):
     return answer
 
 
-i = 0
-while i <= 40:
-    i += 2
-    open_txt_file(i)
+# i = 0
+# while i <= 40:
+#     i += 2
+#     open_txt_file(i)
+open_txt_file(14)
 
 
 

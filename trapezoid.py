@@ -5,13 +5,16 @@ start_time = time.time()
 
 x, y = [], []
 
+# # Read data point (x, y) from CSV file // this file get from digital oscilloscope!!!
 # with open('TEK0000.CSV') as file:
 #     reader_file = csv.reader(file)
 #     for row in reader_file:
 #         x.append(float(row[3]))
 #         y.append(float(row[4]))
 
-with open('test.txt', 'r') as file:
+# Read data point (x, y) from text file
+file = "test.txt"
+with open(file, 'r') as file:
     data = file.readlines()
     for line in data:
         x.append(float(line.split()[0]))
@@ -25,4 +28,3 @@ end_time = time.time() - start_time
 print(answer)
 print(answer/2)
 print("%.10f second" % end_time)
-

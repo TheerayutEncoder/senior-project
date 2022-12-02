@@ -26,13 +26,3 @@ def simp13(data_x, data_y):
         answer += area
 
     return answer
-
-
-# i = 0
-# while i <= 40:
-#     i += 2
-#     open_txt_file(i)
-open_txt_file(14)
-
-
-

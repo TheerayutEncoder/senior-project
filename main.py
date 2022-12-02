@@ -256,7 +256,7 @@ help_menu.add_command(label="About me", command=about)
 
 # plot_menu.add_command(label="Plot graph", command=plot_graph)
 
-img2 = (Image.open("background.jpg"))
+img2 = (Image.open("data/img/background.jpg"))
 resize_img2 = img2.resize((1920, 1080), Image.ANTIALIAS)
 new_img2 = ImageTk.PhotoImage(resize_img2)
 
